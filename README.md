@@ -1,2 +1,2 @@
-# cpp
- C++ programming for my own reference
+# Introduction
+Comp sci. stuff in C++
