@@ -1,2 +1,2 @@
 # Introduction
-Comp sci. stuff in C++
+Some classes in C++
