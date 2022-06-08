@@ -1,97 +1,63 @@
 #ifndef SINGLY_LINKED_LIST_H
 #define SINGLY_LINKED_LIST_H
 
-class Node {
-public:
-	Node() : data(0), link(nullptr) {}
-	Node(int data) : data(data), link(nullptr) {}
-	int getData() { return data; }
-	Node* getLink() { return link; }
-	void setData(int data) { this->data = data; }
-	void setLink(Node* link) { this->link = link; }
-	~Node() { link = nullptr; }
-private:
-	int data;
-	Node* link;
-};
+#include <iostream>
+#include "SinglyLinkedListNode.h"
+
+using namespace std;
 
 class SinglyLinkedList {
 public:
 	SinglyLinkedList() {
-		first = nullptr;
-		last = nullptr;
-		size = 0;
+		first = NULL;
+		count = 0;
 	}
 
 	void insertFront(int data) {
-		if (size == 0) {
-			Node* node = new Node(data);
+		if (first == NULL) {
+			SinglyLinkedListNode* node = new SinglyLinkedListNode;
+			node->setData(data);
+			node->setLink(NULL);
 			first = node;
-			last = node;
-			size++;
-			return;
+			count++;
 		}
 		else {
-			Node* node = new Node(data);
+			SinglyLinkedListNode* node = new SinglyLinkedListNode;
+			node->setData(data);
 			node->setLink(first);
 			first = node;
-			size++;
-			return;
-		}
-	}
-
-	void insertBack(int data) {
-		if (size == 0) {
-			Node* node = new Node(data);
-			first = node;
-			last = node;
-			size++;
-			return;
-		}
-		else {
-			Node* node = new Node(data);
-			last->setLink(node);
-			last = node;
-			size++;
-			return;
+			count++;
 		}
 	}
 
 	void deleteNode(int data) {
-		if (size == 0) {
+		if (first == NULL) {
+			return;
+		}
+		else if (first->getData() == data) {
+			SinglyLinkedListNode* temp = first;
+			first = first->getLink();
+			delete temp;
+			temp = NULL;
+			count--;
 			return;
 		}
 		else {
-			Node* trailCurrent = nullptr;
-			Node* current = first;
-			while (current != nullptr) {
-				if (current->getData() == data) {
-					if (current == first) {
-						first = current->getLink();
-						delete current;
-						current = nullptr;
-						size--;
-						return;
-					}
-					else if (current == last) {
-						last = trailCurrent;
-						trailCurrent->setLink(current->getLink());
-						delete current;
-						current = nullptr;
-						size--;
-						return;
-					}
-					else {
-						trailCurrent->setLink(current->getLink());
-						delete current;
-						current = nullptr;
-						size--;
-						return;
-					}
+			SinglyLinkedListNode* current = first->getLink();
+			SinglyLinkedListNode* trailCurrent = first;
+			while (current != NULL) {
+				bool found = (current->getData() == data) ? true : false;
+				if (found == true) {
+					trailCurrent->setLink(current->getLink());
+					delete current;
+					current = NULL;
+					count--;
+					return;
 				}
 				trailCurrent = current;
 				current = current->getLink();
 			}
+			return;
 		}
 	}
 
@@ -100,29 +66,36 @@ public:
 	}
 
 	int length() {
-		return size;
+		return count;
+	}
+
+	void print() {
+		SinglyLinkedListNode* current = first;
+		while (current != NULL) {
+			cout << current->getData() << " ";
+			current = current->getLink();
+		}
+		cout << endl;
 	}
 
 	void destroyList() {
-		Node* current = first;
-		while (current != nullptr) {
-			Node* temp = current;
+		SinglyLinkedListNode* current = first;
+		while (current != NULL) {
+			SinglyLinkedListNode* temp = current;
 			current = current->getLink();
 			delete temp;
-			temp = nullptr;
+			temp = NULL;
 		}
-		first = nullptr;
-		last = nullptr;
-		size = 0;
+		first = NULL;
+		count = 0;
 	}
 
 	~SinglyLinkedList() {
 		destroyList();
 	}
 private:
-	Node* first;
-	Node* last;
-	int size;
+	SinglyLinkedListNode* first;
+	int count;
 };
 
-#endif
+#endif 
